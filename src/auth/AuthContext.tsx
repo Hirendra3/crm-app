@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { clearSession, loadStoredSession, saveSession } from './session';
-import { setSessionAccessors } from '../api/client';
+import { setSessionAccessors } from '../api/accessors';
 import type { User } from '../types/user';
 
 type AuthState = {

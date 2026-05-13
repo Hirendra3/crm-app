@@ -1,12 +1,11 @@
 import {Platform} from 'react-native';
 import Config from 'react-native-config';
 
-const fallback =
-  Platform.OS === 'android' ? 'http://10.0.2.2:3090' : 'http://127.0.0.1:3090';
+const fallback = 'https://api-crm.oneninelabs.com';
 
 const raw =
-  Config.API_BASE_URL ||
-  '';
+  (Config && Config.API_BASE_URL) ||
+  'https://api-crm.oneninelabs.com';
 
 export function getApiBaseUrl(): string {
   const trimmed = String(raw || '').trim().replace(/\/$/, '');

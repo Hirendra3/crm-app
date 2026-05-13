@@ -72,13 +72,15 @@ export function DashboardScreen() {
 
       setTasksPreview(tasksSlice);
 
-      if (uRes) {
+      if (uRes && 'data' in uRes) {
         setUsersSummary(
           uRes.data.users.slice(0, 6).map(x => `${x.name} (${x.role})`),
         );
       }
 
-      if (kRes) setKpis(kRes.data.kpis);
+      if (kRes && 'data' in kRes) {
+        setKpis(kRes.data.kpis);
+      }
     } catch (e) {
       setError(extractApiError(e));
     } finally {
