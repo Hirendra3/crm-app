@@ -10,7 +10,7 @@ import {
   Platform,
   PermissionsAndroid,
 } from 'react-native';
-import Geolocation from '@react-native-community/geolocation';
+import Geolocation, {type GeolocationError} from '@react-native-community/geolocation';
 import { Dimensions } from 'react-native';
 import { api, extractApiError } from '../api/client';
 import { useAuth } from '../auth/AuthContext';
@@ -31,19 +31,48 @@ function buildFingerprint() {
 }
 
 async function requestLocationPermission(): Promise<void> {
-  if (Platform.OS === 'android') {
-    const r = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-    );
-    if (r !== PermissionsAndroid.RESULTS.GRANTED) {
-      throw new Error(
-        'Location permission is required to sign in. Allow access and try again.',
+  if (Platform.OS === 'ios') {
+    Geolocation.setRNConfiguration({
+      skipPermissionRequests: false,
+      authorizationLevel: 'whenInUse',
+    });
+    await new Promise<void>((resolve, reject) => {
+      Geolocation.requestAuthorization(
+        () => resolve(),
+        err => reject(new Error(geoErrorMessage(err))),
       );
-    }
+    });
+    return;
+  }
+  const r = await PermissionsAndroid.request(
+    PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  );
+  if (r !== PermissionsAndroid.RESULTS.GRANTED) {
+    throw new Error(
+      'Location permission is required to sign in. Allow access and try again.',
+    );
   }
 }
 
-function getGeoOnce(): Promise<{ lat: number; lng: number; accuracyM?: number }> {
+function geoErrorMessage(err: GeolocationError): string {
+  switch (err.code) {
+    case 1:
+      return 'Location permission is required to sign in. Allow access in Settings and try again.';
+    case 2:
+      return 'Location is unavailable. Turn on Location in device settings (and GPS if prompted), then try again.';
+    case 3:
+      return 'Location timed out. Go outdoors or wait for a GPS fix, then try again.';
+    default:
+      return (
+        err.message ||
+        'Could not read GPS. Ensure location services are enabled and try again.'
+      );
+  }
+}
+
+function getCurrentPositionOnce(
+  options: Parameters<typeof Geolocation.getCurrentPosition>[2],
+): Promise<{lat: number; lng: number; accuracyM?: number}> {
   return new Promise((resolve, reject) => {
     Geolocation.getCurrentPosition(
       pos =>
@@ -52,19 +81,50 @@ function getGeoOnce(): Promise<{ lat: number; lng: number; accuracyM?: number }>
           lng: pos.coords.longitude,
           accuracyM: pos.coords.accuracy,
         }),
-      () =>
-        reject(
-          new Error(
-            'Could not read GPS. Ensure location services are enabled and try again.',
-          ),
-        ),
-      {
-        enableHighAccuracy: false,
-        timeout: 8000,
-        maximumAge: 60_000,
-      },
+      reject,
+      options,
     );
   });
+}
+
+async function getGeoOnce(): Promise<{lat: number; lng: number; accuracyM?: number}> {
+  const timeout = 20_000;
+  const attempts: NonNullable<Parameters<typeof Geolocation.getCurrentPosition>[2]>[] =
+    [
+      {enableHighAccuracy: false, timeout, maximumAge: 120_000},
+      {enableHighAccuracy: true, timeout, maximumAge: 0},
+    ];
+
+  let lastErr: GeolocationError | undefined;
+  for (const opts of attempts) {
+    try {
+      return await getCurrentPositionOnce(opts);
+    } catch (e) {
+      lastErr = e as GeolocationError;
+    }
+  }
+
+  if (Platform.OS === 'android') {
+    Geolocation.setRNConfiguration({
+      skipPermissionRequests: true,
+      locationProvider: 'android',
+    });
+    try {
+      return await getCurrentPositionOnce({
+        enableHighAccuracy: true,
+        timeout,
+        maximumAge: 0,
+      });
+    } catch (e) {
+      lastErr = e as GeolocationError;
+    }
+  }
+
+  throw new Error(
+    lastErr
+      ? geoErrorMessage(lastErr)
+      : 'Could not read GPS. Ensure location services are enabled and try again.',
+  );
 }
 
 export function LoginScreen() {
