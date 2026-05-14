@@ -23,5 +23,5 @@ export function PlaceholderScreen() {
 const styles = StyleSheet.create({
   pad: { flex: 1, padding: 16 },
   title: { fontSize: 22, fontWeight: '700' },
-  sub: { marginTop: 10, color: '#52637c', lineHeight: 22 },
+  sub: { marginTop: 10, color: '#334155', lineHeight: 22 },
 });

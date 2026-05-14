@@ -9,6 +9,9 @@ export type User = {
   status?: 'ACTIVE' | 'INACTIVE';
   role: UserRole;
   departmentId: string | null;
-  leaderId: string | null;
+  /** Legacy single leader (some APIs still return this). */
+  leaderId?: string | null;
+  leaderIds?: string[];
   avatarUrl?: string;
+  totpEnabled?: boolean;
 };

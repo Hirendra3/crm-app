@@ -89,16 +89,16 @@ export function AttendanceMeScreen() {
 const styles = StyleSheet.create({
   pad: { padding: 16 },
   title: { fontSize: 22, fontWeight: '700' },
-  meta: { color: '#52637c', marginTop: 8 },
+  meta: { color: '#334155', marginTop: 8 },
   err: { color: '#d00', marginTop: 8 },
   row: {
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#d7e0ee',
+    borderBottomColor: '#cbd5e1',
     backgroundColor: '#fff',
   },
   rowDay: { fontWeight: '700' },
   rowStat: { marginTop: 4, color: '#172033' },
-  note: { marginTop: 4, color: '#52637c', fontSize: 13 },
+  note: { marginTop: 4, color: '#334155', fontSize: 13 },
 });

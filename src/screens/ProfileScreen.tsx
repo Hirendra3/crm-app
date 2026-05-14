@@ -7,6 +7,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { useAuth } from '../auth/AuthContext';
+import { colors } from '../theme/colors';
 
 export function ProfileScreen() {
   const { user, logout } = useAuth();
@@ -35,16 +36,16 @@ export function ProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  pad: { padding: 16, paddingBottom: 48 },
-  title: { fontSize: 24, fontWeight: '700', marginBottom: 16 },
+  pad: { padding: 16, paddingBottom: 48, backgroundColor: colors.bg },
+  title: { fontSize: 24, fontWeight: '700', marginBottom: 16, color: colors.text },
   card: {
     padding: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#d7e0ee',
-    backgroundColor: '#fff',
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
   },
-  row: { marginBottom: 8 },
+  row: { marginBottom: 8, color: colors.text, fontSize: 16 },
   logout: {
     marginTop: 28,
     borderWidth: 1,

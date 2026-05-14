@@ -8,6 +8,7 @@ type AuthState = {
   token: string | null;
   ready: boolean;
   setAuth: (t: string, u: User) => Promise<void>;
+  updateUser: (u: User) => Promise<void>;
   logout: () => Promise<void>;
 };
 
@@ -35,6 +36,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(u);
     tokenRef.current = t;
     await saveSession(t, JSON.stringify(u));
+  }, []);
+
+  const updateUser = useCallback(async (u: User) => {
+    setUser(u);
+    const t = tokenRef.current;
+    if (t) await saveSession(t, JSON.stringify(u));
   }, []);
 
   useEffect(() => {
@@ -72,9 +79,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       token,
       ready,
       setAuth,
+      updateUser,
       logout,
     }),
-    [logout, ready, setAuth, token, user],
+    [logout, ready, setAuth, updateUser, token, user],
   );
 
   return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;

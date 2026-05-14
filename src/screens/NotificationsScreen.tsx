@@ -89,7 +89,7 @@ export function NotificationsScreen() {
   const header = (
     <View style={styles.hdr}>
       <View>
-        <Text style={styles.title}>Notifications</Text>
+        <Text style={styles.title}>Alerts</Text>
         <Text style={styles.meta}>Unread: {unread}</Text>
       </View>
       <TouchableOpacity
@@ -149,16 +149,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: { fontSize: 22, fontWeight: '700' },
-  meta: { color: '#52637c', marginTop: 4 },
+  meta: { color: '#334155', marginTop: 4 },
   row: {
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#d7e0ee',
+    borderBottomColor: '#cbd5e1',
     backgroundColor: '#fff',
   },
   rowTitle: { fontWeight: '600' },
-  rowMeta: { fontSize: 13, color: '#52637c', marginTop: 4 },
+  rowMeta: { fontSize: 13, color: '#334155', marginTop: 4 },
   err: { color: '#d00', marginVertical: 8 },
   smallBtn: {
     paddingHorizontal: 12,

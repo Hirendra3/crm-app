@@ -100,15 +100,15 @@ export function UsersScreen() {
 const styles = StyleSheet.create({
   pad: { padding: 16, paddingBottom: 4 },
   title: { fontSize: 22, fontWeight: '700' },
-  meta: { color: '#52637c', marginTop: 8 },
+  meta: { color: '#334155', marginTop: 8 },
   err: { color: '#d00', marginTop: 8 },
   row: {
     paddingVertical: 12,
     paddingHorizontal: 16,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#d7e0ee',
+    borderBottomColor: '#cbd5e1',
     backgroundColor: '#fff',
   },
   rowTitle: { fontWeight: '700' },
-  rowMeta: { fontSize: 13, color: '#52637c', marginTop: 4 },
+  rowMeta: { fontSize: 13, color: '#334155', marginTop: 4 },
 });

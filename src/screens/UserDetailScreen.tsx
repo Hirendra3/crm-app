@@ -78,10 +78,10 @@ const styles = StyleSheet.create({
     padding: 14,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#d7e0ee',
+    borderColor: '#cbd5e1',
     backgroundColor: '#fff',
   },
   line: { marginBottom: 8 },
   err: { color: '#d00', marginVertical: 8 },
-  note: { marginTop: 16, color: '#52637c' },
+  note: { marginTop: 16, color: '#334155' },
 });
